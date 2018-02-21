@@ -177,3 +177,55 @@ t.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$u
 ?wilcox.test
 wilcox.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
 ks.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
+
+#Exercise 5
+
+#Item 1
+peruvians=read.table("peruvians.txt",header=TRUE)
+peruvians = peruvians[,-c(5,6,7)]
+pairs(peruvians, upper.panel=NULL)
+# Answer: Based on the pairs is possible to see a potential correlation in the following pairs:
+# migration x age, migration x weight, migration x wrist
+# This conclusion is based on the fact that the plot from these pairs resembles a straight line passing through the
+# orign.
+
+#Item 2
+# Tests will be conducted using Spearma's rank correlation test which doesn't assume normality between the two
+# variables.
+attach(peruvians) # Keeping the dataset in memory so r functions will access information based on column's
+                              # names
+# Test 5.2.1 (migration x age)
+peruvians[,c(1,2)]
+cor.test(migration, age,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.0021, which leds us to reject the null hypothesis that rho is equal
+# to 0. In fact, the calculated rho based on the samples is 0.4760.
+
+# Test 5.2.2 (migration x weight)
+cor.test(migration, weight,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.02861, which leds us to reject the null hypothesis that rho is equal
+# to 0. In fact, the calculated rho based on the samples is 0.3506.
+
+# Test 5.2.3 (migration x length)
+cor.test(migration, length,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.6087, which leds us to fail to reject the null hypothesis that rho is equal
+# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
+# The calculated rho based on the samples is 0.0845 which is very close to 0 -> So it is indeed possible to conclude 
+# that these variables are not correlated to each other.
+
+# Test 5.2.4 (migration x wrist)
+cor.test(migration, wrist,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.1797, which leds us to fail to reject the null hypothesis that rho is equal
+# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
+# However, the calculated rho for the sample is different from 0 (in fact rho = 0.2193).
+
+# Test 5.2.4 (migration x wrist)
+cor.test(migration, wrist,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.1797, which leds us to fail to reject the null hypothesis that rho is equal
+# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
+# However, the calculated rho for the sample is different from 0 (in fact rho = 0.2193).
+
+# Test 5.2.5 (migration x diastolic)
+cor.test(migration, diastolic,method="spearman")
+# Answer: As can be seen from the test, p-value = 0.6494, which leds us to fail to reject the null hypothesis that rho is equal
+# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
+# However, the calculated rho for the sample is different from 0 (in fact rho = 0.0751).
