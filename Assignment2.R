@@ -11,28 +11,33 @@ light1882_vec <- light1882_vec[!is.na(light1882_vec)]
 light1882_vec = light1882_vec + 299000
 
 light_vec = unlist(light_dataframe, use.names = FALSE)
-light_vec = 7442 / (((light_vec/1000) + 24.8)/1000000)
+light_vec = 7.442 / (((light_vec/1000) + 24.8)/1000000)
 
 #Question 2.1
 par(mfrow=c(1,2))
+
+# Answer: Given the boxplot and histogram of light1879 dataset, we can observe some outliers and the qqline is not straight
+# so we can presume that this dataset doesn't follow a normal distribution.
 hist(light1879_vec, xlab = "Light velocity 1879")
 boxplot(light1879_vec)
 qqnorm(light1879_vec)
 qqline(light1879_vec)
+
+# Answer: Similary, we can observe some outliers in the boxplot diagram
+# and the qqline is not straight in the histogram of 1882 dataset
+# We can consider that this dataset is not in normal distribution
 
 hist(light1882_vec, xlab = "Light velocity 1882")
 boxplot(light1882_vec)
 qqnorm(light1882_vec)
 qqline(light1882_vec)
 
+# Answer: As we can see from the histogram of light.txt dataset, the points are approximately on a straight line
+# then this dataset can be assumed to be sampled from a normal distribution
 hist(light_vec, xlab = "Light velocity")
 boxplot(light_vec)
 qqnorm(light_vec)
 qqline(light_vec)
-
-qnorm(0.025)
-qnorm(0.975)
-mean(light1879_vec)
 
 #Question 2.2
 # Dataset 1879
@@ -59,9 +64,6 @@ Tstar975=quantile(Tstar,0.975)
 Tmedian = median(light1879_vec)
 c(2*Tmedian-Tstar975,2*Tmedian-Tstar25)
 
-# Compare median result with wilcoxon (only for median)
-wilcox.test(light1879_vec, conf.int = TRUE, conf.level = 0.95)
-
 # Dataset 1882
 #### MEAN 
 B=1000
@@ -85,9 +87,6 @@ Tstar25=quantile(Tstar,0.025)
 Tstar975=quantile(Tstar,0.975)
 Tmedian = median(light1882_vec)
 c(2*Tmedian-Tstar975,2*Tmedian-Tstar25)
-
-# Compare median result with wilcoxon (only for median)
-wilcox.test(light1882_vec, conf.int = TRUE, conf.level = 0.95)
 
 # Dataset light.txt
 #### MEAN 
@@ -113,11 +112,21 @@ Tstar975=quantile(Tstar,0.975)
 Tmedian = median(light_vec)
 c(2*Tmedian-Tstar975,2*Tmedian-Tstar25)
 
-# Compare median result with wilcoxon (only for median)
-wilcox.test(light_vec, conf.int = TRUE, conf.level = 0.95)
+# The dataset light.txt follows the normal distribution so mean and median are equal.
+# The confidence interval for μ with 95% confidence is measured as below
+sd_light=sd(light_vec)
+len_sample=length(light_vec)
+c(Tmean-2*sd_light/sqrt(len_sample), Tmean+2*sd_light/sqrt(len_sample))
 
-# Question 4.4
-t.test(light_vec, mu= 299792458)
+# Question 2.3
+# The confidence interval of 
+#
+#
+
+# Question 2.4
+# The p-value of t-test is greater than 0.05 and therefore we can not reject the null hypothesis that
+# the value of speed measured by Michelson and Newcomb is equal to the currently most accurate value, 299792.458 km/s
+t.test(light_vec, mu= 299792.458)
 
 ### Ex 4
 # Question 4.1
@@ -126,19 +135,25 @@ cloud_data = read.table("clouds.txt", header=TRUE)
 
 summary(cloud_data$seeded)
 sd(cloud_data$seeded)
-vector1 = cloud_data$seeded
 hist(cloud_data$seeded)
 qqnorm(cloud_data$seeded)
+qqline(cloud_data$seeded)
 
 summary(cloud_data$unseeded)
 sd(cloud_data$unseeded)
-vector2 = cloud_data$unseeded
 hist(cloud_data$unseeded)
 qqnorm(cloud_data$unseeded)
+qqline(cloud_data$unseeded)
+
+# Comment: Given the histograms and qq-plots of seed and unseed cloud data, we can't assume that they are in a normal distribution
+# As a result, we can't apply the two samples t-test in this case because the assumption of the normal distribution in t-test was violated
+# The Mann- Whitney test and the Kolmogorov-Smirnov test can be adopted in this case for the reason that both don't assume
+# observations are from normal distribution 
 
 t.test(cloud_data$seeded, cloud_data$unseeded)
-?wilcox.test
-wilcox.test(vector1, vector2)
+#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of equal means is rejected
+wilcox.test(cloud_data$seeded, cloud_data$unseeded)
+# Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(cloud_data$seeded, cloud_data$unseeded)
 
 # Question 4.2
@@ -149,33 +164,57 @@ summary(square_root_data$seeded)
 sd(square_root_data$seeded)
 hist(square_root_data$seeded)
 qqnorm(square_root_data$seeded)
+qqline(square_root_data$seeded)
 
 summary(square_root_data$unseeded)
 sd(square_root_data$unseeded)
 hist(square_root_data$unseeded)
 qqnorm(square_root_data$unseeded)
+qqline(square_root_data$unseeded)
 
+# Comment: Similarly, we can't assume that the square root of seed and unseed cloud data are in a normal distribution
+
+
+# The assumption of the normal distribution in the two samples t-test was violated so we shouldn't apply t-test to the data.
+# The Mann- Whitney test and the Kolmogorov-Smirnov test can be adopted in this case for the reason that both don't assume
+# observations are from normal distribution 
 t.test(square_root_data$seeded, square_root_data$unseeded)
-?wilcox.test
+#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of equal means is rejected
 wilcox.test(square_root_data$seeded, square_root_data$unseeded)
+#  Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(square_root_data$seeded, square_root_data$unseeded)
 
 # Question 4.3
 par(mfrow=c(1,4))
+
+# Comment: After transformed by square root of the square root of the values, seed clouds data don't still 
+# follow the normal probability distribution, which can be observed from the histogram and qq-lot
 square_root_of_square_root_data = sqrt(square_root_data)
 summary(square_root_of_square_root_data$seeded)
 sd(square_root_of_square_root_data$seeded)
 hist(square_root_of_square_root_data$seeded)
 qqnorm(square_root_of_square_root_data$seeded)
+qqline(square_root_of_square_root_data$seeded)
 
+# Comment: After transformed by square root of the square root of the values, unseed clouds data can be considered to
+# follow the normal probability distribution, which can be observed from the histogram and qq-lot
 summary(square_root_of_square_root_data$unseeded)
 sd(square_root_of_square_root_data$unseeded)
 hist(square_root_of_square_root_data$unseeded)
 qqnorm(square_root_of_square_root_data$unseeded)
+qqline(square_root_of_square_root_data$unseeded)
+
+
+# Square root of the square root of the values in seed clouds doesn't follow the normal distribution and we can't use the two samples t-test
+# in this situtation.
+# The Mann- Whitney test and the Kolmogorov-Smirnov test can be apply again in this case due to the fact that both don't assume
+# observations are from normal distribution 
 
 t.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
-?wilcox.test
+
+#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of equal means is rejected
 wilcox.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
+#  Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
 
 #Exercise 5
