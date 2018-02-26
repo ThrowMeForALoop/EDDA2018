@@ -1,5 +1,4 @@
 # Exercise 1
-
 setwd("C:/Uni_Projects/EDDA/Assignment 2");
 data <- scan(file = "telephone_exe1.txt")  # Before running this command edit the input file removing the header and the
                                       #empty line.
@@ -103,14 +102,15 @@ light_vec = 7.442 / (((light_vec/1000) + 24.8)/1000000)
 # Question 2.1
 par(mfrow=c(1,2))
 
-# Answer: Given the boxplot and histogram of light1879 dataset, we can observe some outliers and the qqline is not straight
-# so we can presume that this dataset doesn't follow a normal distribution.
+#-> Final: It's doubtfully in normal distribution. Median is about ... "". 
+# 50% of data located in the range of ... 
+# There are some outliers in the box plot
+# The histogram is quite symetric and median
+
 hist(light1879_vec, xlab = "Light velocity 1879")
 boxplot(light1879_vec)
 qqnorm(light1879_vec)
-qqline(light1879_vec)
-
-# Answer: Similary, we can observe some outliers in the boxplot diagram
+# Final: We can observe some outliers in the boxplot diagram
 # and the qqline is not straight in the histogram of 1882 dataset
 # We can consider that this dataset is not in normal distribution
 
@@ -119,13 +119,12 @@ boxplot(light1882_vec)
 qqnorm(light1882_vec)
 qqline(light1882_vec)
 
-# Answer: As we can see from the histogram of light.txt dataset, the points are approximately on a straight line
-# then this dataset can be assumed to be sampled from a normal distribution
+# Answer: Not normal
 hist(light_vec, xlab = "Light velocity")
 boxplot(light_vec)
 qqnorm(light_vec)
 qqline(light_vec)
-
+shapiro.test(light_vec)
 # Question 2.2
 # Dataset 1879
 #### MEAN 
@@ -150,7 +149,7 @@ Tstar25=quantile(Tstar,0.025)
 Tstar975=quantile(Tstar,0.975)
 Tmedian = median(light1879_vec)
 c(2*Tmedian-Tstar975,2*Tmedian-Tstar25)
-
+# ******* Note: Add differecence between mean and median interval + explanation ***
 # Dataset 1882
 #### MEAN 
 B=1000
@@ -213,7 +212,9 @@ c(Tmean-2*sd_light/sqrt(len_sample), Tmean+2*sd_light/sqrt(len_sample))
 # Question 2.4
 # The p-value of t-test is greater than 0.05 and therefore we can not reject the null hypothesis that
 # the value of speed measured by Michelson and Newcomb is equal to the currently most accurate value, 299792.458 km/s
-t.test(light_vec, mu= 299792.458)
+wilcox.test(light_vec, mu= 299792.458)
+# -> Add exp for 3 experiments
+# -> If not in the interval -> Wrong experiment -
 
 ### Exercise 3
 # Question 3.1
@@ -228,7 +229,8 @@ m=sum(klm>72)
 n= length(klm)
 binom.test(m,n,p=0.1)
 
-### Exercise 4
+### Exercise 4: 
+#****** Note: check the effect of square root to data
 # Question 4.1
 par(mfrow=c(1,4))
 cloud_data = read.table("clouds.txt", header=TRUE)
@@ -251,7 +253,8 @@ qqline(cloud_data$unseeded)
 # observations are from normal distribution 
 
 t.test(cloud_data$seeded, cloud_data$unseeded)
-#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of equal means is rejected
+# Same distribution instead same mean
+#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of is rejected
 wilcox.test(cloud_data$seeded, cloud_data$unseeded)
 # Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(cloud_data$seeded, cloud_data$unseeded)
@@ -320,6 +323,8 @@ ks.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$
 ###Exercise 5
 
 # Question 5.1
+# **** NOTE: Draw linear regression line between two axis
+# *****: Draw qqplot on suspected correlation
 peruvians=read.table("peruvians.txt",header=TRUE)
 peruvians = peruvians[,-c(5,6,7)]
 pairs(peruvians, upper.panel=NULL)
@@ -344,18 +349,13 @@ cor.test(migration, weight,method="spearman")
 # Answer: As can be seen from the test, p-value = 0.02861, which leds us to reject the null hypothesis that rho is equal
 # to 0. In fact, the calculated rho based on the samples is 0.3506.
 
+#**** NOTE: Check p-value and confirmation about rho
 # Test 5.2.3 (migration x length)
 cor.test(migration, length,method="spearman")
 # Answer: As can be seen from the test, p-value = 0.6087, which leds us to fail to reject the null hypothesis that rho is equal
-# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
+# to 0 - considering a o.05 confidence level
 # The calculated rho based on the samples is 0.0845 which is very close to 0 -> So it is indeed possible to conclude 
 # that these variables are not correlated to each other.
-
-# Test 5.2.4 (migration x wrist)
-cor.test(migration, wrist,method="spearman")
-# Answer: As can be seen from the test, p-value = 0.1797, which leds us to fail to reject the null hypothesis that rho is equal
-# to 0 - considering a o.05 confidence level (despite the fact that R's output states that H0 can be rejected).
-# However, the calculated rho for the sample is different from 0 (in fact rho = 0.2193).
 
 # Test 5.2.4 (migration x wrist)
 cor.test(migration, wrist,method="spearman")
@@ -373,6 +373,9 @@ cor.test(migration, diastolic,method="spearman")
 # Question 6.1
 run=read.table("run.txt")
 run
+soft_drink=run[run$drink=='lemo', 1:2]
+energy=run[run$drink=='energy', 1:2]
+
 par(mfrow=c(1,2))
 qqnorm(soft_drink[,1],main = 'QQ-Plot Before Soft Drink')
 qqnorm(soft_drink[,2],main = 'QQ-Plot After Soft Drink')
@@ -466,9 +469,10 @@ dogsaov= lm(plasma~drugs,data = dogsframe)
 anova(dogsaov)
 summary(dogsaov)
 
+#** Note ++++
 drug1 = 0.4340
-drug2 = drug1 - 0.0350
-drug3 = drug1 - 0.4190
+drug2 = drug1 +0.0350
+drug3 = drug1 + 0.4190
 drug1; drug2; drug3
 
 # Question 7.3
