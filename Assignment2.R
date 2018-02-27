@@ -441,7 +441,7 @@ diff_time <- data.frame(numeric(n), character(n))
 diff_time[,1]= run[,2]- run[,1]
 diff_time[,2]= run[,3]
 wilcox.test(diff_time[1:12,1],diff_time[13:24,1])
-#diff_time
+diff_time
 
 # Question 6.4 
 # In Doc File
@@ -449,15 +449,13 @@ wilcox.test(diff_time[1:12,1],diff_time[13:24,1])
 # Question 6.5 
 # In Doc File
 
+
 # Question 6.6
 par(mfrow=c(1,2))
 qqnorm(diff_time[1:12,1],main = 'QQ-Plot of Residual lemo')
 qqnorm(diff_time[13:24,1],main = 'QQ-Plot of Residual soft')
 t.test(diff_time[1:12,1],diff_time[13:24,1],paired = TRUE)
 
-#qqnorm(sqrt(diff_time[1:12,1]),main = 'QQ-Plot of SQRT Residual lemo')
-#qqnorm(sqrt(diff_time[13:24,1]),main = 'QQ-Plot of SQRT Residual soft')
-#t.test(sqrt(diff_time[1:12,1]),sqrt(diff_time[13:24,1]),paired = TRUE)
 
 ### Exercise 7
 
