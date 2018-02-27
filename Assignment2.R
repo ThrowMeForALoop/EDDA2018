@@ -107,7 +107,6 @@ par(mfrow=c(1,2))
 # 50% of data located in the range of ... 
 # There are some outliers in the box plot
 # The histogram is quite symetric and median
-
 median(light1879_vec)
 hist(light1879_vec, xlab = "Light velocity 1879")
 boxplot(light1879_vec)
@@ -236,7 +235,6 @@ n= length(klm)
 binom.test(m,n,p=0.1)
 
 ### Exercise 4: 
-#****** Note: check the effect of square root to data
 # Question 4.1
 par(mfrow=c(1,4))
 cloud_data = read.table("clouds.txt", header=TRUE)
@@ -244,6 +242,7 @@ cloud_data = read.table("clouds.txt", header=TRUE)
 summary(cloud_data$seeded)
 sd(cloud_data$seeded)
 hist(cloud_data$seeded)
+boxplot(cloud_data$seeded)
 qqnorm(cloud_data$seeded)
 qqline(cloud_data$seeded)
 
@@ -260,7 +259,7 @@ qqline(cloud_data$unseeded)
 
 t.test(cloud_data$seeded, cloud_data$unseeded)
 # Same distribution instead same mean
-#  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of is rejected
+#  Man-Whitney signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of is rejected
 wilcox.test(cloud_data$seeded, cloud_data$unseeded)
 # Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(cloud_data$seeded, cloud_data$unseeded)
@@ -269,6 +268,7 @@ ks.test(cloud_data$seeded, cloud_data$unseeded)
 par(mfrow=c(1,4))
 square_root_data = sqrt(cloud_data)
 
+boxplot(square_root_data$seeded)
 summary(square_root_data$seeded)
 sd(square_root_data$seeded)
 hist(square_root_data$seeded)
@@ -282,8 +282,6 @@ qqnorm(square_root_data$unseeded)
 qqline(square_root_data$unseeded)
 
 # Comment: Similarly, we can't assume that the square root of seed and unseed cloud data are in a normal distribution
-
-
 # The assumption of the normal distribution in the two samples t-test was violated so we shouldn't apply t-test to the data.
 # The Mann- Whitney test and the Kolmogorov-Smirnov test can be adopted in this case for the reason that both don't assume
 # observations are from normal distribution 
@@ -292,6 +290,7 @@ t.test(square_root_data$seeded, square_root_data$unseeded)
 wilcox.test(square_root_data$seeded, square_root_data$unseeded)
 #  Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
 ks.test(square_root_data$seeded, square_root_data$unseeded)
+
 
 # Question 4.3
 par(mfrow=c(1,4))
@@ -304,6 +303,8 @@ sd(square_root_of_square_root_data$seeded)
 hist(square_root_of_square_root_data$seeded)
 qqnorm(square_root_of_square_root_data$seeded)
 qqline(square_root_of_square_root_data$seeded)
+
+
 
 # Comment: After transformed by square root of the square root of the values, unseed clouds data can be considered to
 # follow the normal probability distribution, which can be observed from the histogram and qq-lot
@@ -320,7 +321,6 @@ qqline(square_root_of_square_root_data$unseeded)
 # observations are from normal distribution 
 
 t.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
-
 #  Wilcoxon signed rank test: p-value = 0.01383 < 0.05, we can conclude that Ho of equal means is rejected
 wilcox.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
 #  Kolmogorov-Smirnov test: p-value = 0.01905 < 0.05, we can conclude that Ho of equal means is rejected
