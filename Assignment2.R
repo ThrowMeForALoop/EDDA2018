@@ -70,14 +70,17 @@ c(2*T1-Tstar975,2*T1-Tstar25) # ==> mean is in this interval
 #    97.5%     2.5% 
 # 38.12714 48.77792 Bootstrap interval for the mean of this population with 95% confidence.
 
-par(mfrow=c(1,3))
+par(mfrow=c(1,2))
 hist(data, prob=T)
-hist(TstarBootstrapInterval)
-boxplot(TstarBootstrapInterval)
-# Conclusion: Considering the boostrap confidence interval, the mean consumption for this population falls in the
-#interval between 38.12714 and 48.77792, so the marketing manager could potentially focus on consumers within this
-# range.
-
+boxplot(data)
+#Conclusion: Considering the boostrap confidence interval, the mean consumption for this population falls in the
+#interval between 38.12714 and 48.77792.
+#The boxplot shows that the distribution of consumption is not simetric around the median, 
+#with the a considerable #scatered consumption between the median and the third quartile. On the other hand,
+#the consumption figures between Q1 and median (so representing 25% of the data) are concentrated which could
+#represent an opportunity for target market campaings.
+#There is also an opportunity for high-end consumers (above 80) since 25% of the consumers are located at this
+#region of the boxplot.
 
 ### Exercise 2
 light1879_dataframe=read.table("light1879.txt", header = FALSE)
