@@ -75,23 +75,17 @@ light_vec = unlist(light_dataframe, use.names = FALSE)
 light_vec = 7.442 / (((light_vec/1000) + 24.8)/1000000)
 
 # Question 2.1
-par(mfrow=c(1,2))
+par(mfrow=c(1,3))
 
-median(light1879_vec)
-hist(light1879_vec, xlab = "Light velocity 1879")
-boxplot(light1879_vec)
-qqnorm(light1879_vec)
-qqline(light1879_vec)
+hist(light1879_vec, xlab = "Speed of light 1879")
+hist(light1882_vec, xlab = "Speed of light 1882")
+hist(light_vec, xlab = "Speed of Light")
 
-hist(light1882_vec, xlab = "Light velocity 1882")
-boxplot(light1882_vec)
-qqnorm(light1882_vec)
-qqline(light1882_vec)
+par(mfrow=c(1,3))
 
-hist(light_vec, xlab = "Light velocity")
-boxplot(light_vec)
-qqnorm(light_vec)
-qqline(light_vec)
+boxplot(light1879_vec, main = "Boxplot of light1879 dataset")
+boxplot(light1882_vec, main = "Boxplot of light1882 dataset")
+boxplot(light_vec, main = "Boxplot of light dataset")
 
 # Question 2.2
 # Dataset 1879
@@ -166,12 +160,6 @@ Tstar975=quantile(Tstar,0.975)
 Tmedian = median(light_vec)
 c(2*Tmedian-Tstar975,2*Tmedian-Tstar25)
 
-# The confidence interval for μ with 95% confidence is measured as below
-sd_light=sd(light_vec)
-len_sample=length(light_vec)
-c(Tmean-2*sd_light/sqrt(len_sample), Tmean+2*sd_light/sqrt(len_sample))
-
-
 # Question 2.4
 # 1879 dataset is in normal distribution
 accurate_light_velocity =  299792.458
@@ -180,7 +168,7 @@ t.test(light1879_vec, mu=accurate_light_velocity, conf.level=0.95)
 # 1882 and light.txt is not in normal distribution
 wilcox.test(light1882_vec, mu= accurate_light_velocity)
 wilcox.test(light_vec, mu= accurate_light_velocity)
-
+?wilcox.test()
 
 ### Exercise 3
 
@@ -199,64 +187,52 @@ binom.test(m,n,p=0.1)
 ### Exercise 4 
 
 # Question 4.1
-par(mfrow=c(1,4))
 cloud_data = read.table("clouds.txt", header=TRUE)
 
-summary(cloud_data$seeded)
-sd(cloud_data$seeded)
-hist(cloud_data$seeded)
-boxplot(cloud_data$seeded)
-qqnorm(cloud_data$seeded)
-qqline(cloud_data$seeded)
+par(mfrow=c(1,3))
+hist(cloud_data$seeded, main= "Histogram of seeded cloud", xlab = "precipitation")
+boxplot(cloud_data$seeded, main= "Boxplot of seeded cloud")
+qqnorm(cloud_data$seeded, main = "QQPlot of seeded cloud")
 
-summary(cloud_data$unseeded)
-sd(cloud_data$unseeded)
-hist(cloud_data$unseeded)
-qqnorm(cloud_data$unseeded)
-qqline(cloud_data$unseeded)
+par(mfrow=c(1,3))
+hist(cloud_data$unseeded,  main= "Histogram of unseeded cloud", xlab = "precipitation")
+boxplot(cloud_data$unseeded, main= "Boxplot of unseeded cloud")
+qqnorm(cloud_data$unseeded, main= "QQPlot of unseeded cloud")
 
 t.test(cloud_data$seeded, cloud_data$unseeded)
 wilcox.test(cloud_data$seeded, cloud_data$unseeded)
 ks.test(cloud_data$seeded, cloud_data$unseeded)
 
 # Question 4.2
-par(mfrow=c(1,4))
 square_root_data = sqrt(cloud_data)
 
-boxplot(square_root_data$seeded)
-summary(square_root_data$seeded)
-sd(square_root_data$seeded)
-hist(square_root_data$seeded)
-qqnorm(square_root_data$seeded)
-qqline(square_root_data$seeded)
+par(mfrow=c(1,3))
+hist(square_root_data$seeded, main= "Histogram of square of seeded cloud", xlab = "precipitation")
+boxplot(square_root_data$seeded, main= "Boxplot of square of seeded cloud")
+qqnorm(square_root_data$seeded, main= "QQPlot of square of seeded cloud")
 
-summary(square_root_data$unseeded)
-sd(square_root_data$unseeded)
-hist(square_root_data$unseeded)
-qqnorm(square_root_data$unseeded)
-qqline(square_root_data$unseeded)
+par(mfrow=c(1,3))
+hist(square_root_data$unseeded, main= "Histogram of square of unseeded cloud", xlab = "precipitation")
+boxplot(square_root_data$unseeded, main= "Boxplot of square of unseeded cloud")
+qqnorm(square_root_data$unseeded, main= "QQPlot of square of unseeded cloud")
 
 t.test(square_root_data$seeded, square_root_data$unseeded)
 wilcox.test(square_root_data$seeded, square_root_data$unseeded)
 ks.test(square_root_data$seeded, square_root_data$unseeded)
 
-
 # Question 4.3
-par(mfrow=c(1,4))
-
 square_root_of_square_root_data = sqrt(square_root_data)
-summary(square_root_of_square_root_data$seeded)
-sd(square_root_of_square_root_data$seeded)
-hist(square_root_of_square_root_data$seeded)
-qqnorm(square_root_of_square_root_data$seeded)
-qqline(square_root_of_square_root_data$seeded)
+
+par(mfrow=c(1,3))
+hist(square_root_of_square_root_data$seeded, main= "Histogram- square of square seeded cloud", xlab = "precipitation")
+boxplot(square_root_of_square_root_data$seeded, main= "Boxplot- square of square seeded cloud")
+qqnorm(square_root_of_square_root_data$seeded, main= "QQPlot- square of square seeded cloud")
 
 
-summary(square_root_of_square_root_data$unseeded)
-sd(square_root_of_square_root_data$unseeded)
-hist(square_root_of_square_root_data$unseeded)
-qqnorm(square_root_of_square_root_data$unseeded)
-qqline(square_root_of_square_root_data$unseeded)
+
+hist(square_root_of_square_root_data$unseeded, main= "Histogram- square of square unseeded cloud", xlab = "precipitation")
+boxplot(square_root_of_square_root_data$unseeded, main= "Boxplot- square of square unseeded cloud")
+qqnorm(square_root_of_square_root_data$unseeded, main= "QQPlot- square of square unseeded cloud", xlab = "precipitation")
 
 t.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
 wilcox.test(square_root_of_square_root_data$seeded, square_root_of_square_root_data$unseeded)
