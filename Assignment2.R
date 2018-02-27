@@ -450,6 +450,10 @@ qqnorm(diff_time[1:12,1],main = 'QQ-Plot of Residual lemo')
 qqnorm(diff_time[13:24,1],main = 'QQ-Plot of Residual soft')
 t.test(diff_time[1:12,1],diff_time[13:24,1],paired = TRUE)
 
+#qqnorm(sqrt(diff_time[1:12,1]),main = 'QQ-Plot of SQRT Residual lemo')
+#qqnorm(sqrt(diff_time[13:24,1]),main = 'QQ-Plot of SQRT Residual soft')
+#t.test(sqrt(diff_time[1:12,1]),sqrt(diff_time[13:24,1]),paired = TRUE)
+
 ### Exercise 7
 
 # Question 7.1
