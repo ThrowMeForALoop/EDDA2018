@@ -1,63 +1,57 @@
-
 # Exercise 1
+
 setwd("C:/Uni_Projects/EDDA/Assignment 2");
 data <- scan(file = "telephone_exe1.txt")  # Before running this command edit the input file removing the header and the
-                                      #empty line.
+#empty line.
 #Item 1.1
-#Answer: The resolution is twofold.
-#Two Bootstrat tests will be executed to demonstrate whether the data could stem from an exponential distribution
-#with lambda between 0.01 and 0.1.
-#
-#Having a lambda between 0.01 and 0.1 in a exponential distribution means that the mean for this population
-#would be contained in the interval 1/(0.1) -> 10 and 1/(0.01) -> 100 [10;100].
-#
-#Thus, the first test will consist of a null hypothesis that lambda = 0.1 (lowerBound ==> mean = 10) with alternative 
-#hypothesis that lambda < 0.1 (mean > 10), the idea is to demonstrate that given this alternative hypothesis 
-#we reject the null hypothesis in favor of the alternative hypothesis (lambda < 0.1).
-#
-#The second test will use null hypothesis that lambda = 0.01 (upperBound) with alternative hypothesis that lambda > 0.01 (mean <= 100)
-# the idea is to demonstrate that given this alternative hypothesis we reject the null hypothesis in favor of the alternative
-#hypothesis (lambda > 0.01).
+#Answer:
+#Considering the given interval for lambda, the approach to understand whether the data follows a Exp distribution
+#with a lambda within this interval, will be to compute the p-value for different values of lambda.
+#The intention is to identify the behavior of p-value depending on the lambda.
 
 t=median(data) # The statistic to be used is the median - t = median for the given population's sample
 
+numLambdas=50
 B=1000; # Number of simulations
-tstarUpperBound=numeric(B)
-tstarLowerBound=numeric(B)
+tstar=numeric(B) #Creating a Tstar vector to be used in the Bootstrap test
 n=length(data)
 
-#First test
-# Generating the simulations, creating simulated samples Xstars and computing the statistic over that simulation Tstars
-# considering H0 a distribution with lambda = 0.1 (mean = 10) and H1 lambda < 0.1 (mean > 10).
-# Lambda = 0.1 means that the exp. distribution has an average 1/0.1 = 10 with a sd. = sqr(1/(0.1^2) = 10.
+#Initially the interval for lambda will be split into equidistant values for lambda. Afterwards, the p-value
+#will be calculated for each of them.
 
-for (i in 1:B){
-  xstarLower=rexp(n,0.1) # generating simulated samples
-  tstarLowerBound[i]=median(xstarLower) #generating surrogated ts
+#Spliting the lambda interval in 50 different points:
+lambdas=numeric(numLambdas)
+pvalues=numeric(numLambdas)
+
+lambdas=seq(0.01,0.1,length=50)
+
+for (j in 1:numLambdas) {
+  # Creating Xstars and surrogate Tstars
+  tstar=numeric(B) #Creating a Tstar vector to be used in the Bootstrap test
+  for (i in 1:B){
+    xstar=rexp(n,lambdas[j]) # generating simulated samples
+    tstar[i]=median(xstar) #generating surrogated ts
+  }
+  # Calculating p-value for the current lambda
+  pl=sum(tstar<t)/B
+  pr=sum(tstar>t)/B
+  pvalues[j]=2*min(pl,pr)
+  print(j);print(lambdas[j]);print(pvalues[j])
 }
 
-# Calculating p-value for this test.
-pLowerBound=sum(tstarLowerBound>t)/B # P-value upon which we would reject (or fail to reject) the null hypothesis.
-                           # This is the probability of computing the statistic with values higher than the observed. 
-pLowerBound
-# As can be seen, p is very low (0), so we reject the null hypothesis in favor of the alternative hypothesis.
+par(mfrow=c(1,2))
+plot(lambdas,pvalues, main="Lambda x p-value")
 
-#Second test
-# Now generating another simulation but considering different null and alternative hypothesis:
-# H0 distribution is a exp distribution with lambda = 0.01 (mean =100) and H1 lambda is > 0.01 (mean < 100)
-# Lambda = 0.01 means that the exp. distribution has an average 1/0.01 = 100 with a sd. = sqr(1/(0.01^2) = 100.
-for (i in 1:B){
-  xstarUpper=rexp(n,0.01) # generating simulated samples
-  tstarUpperBound[i]=median(xstarUpper) #generating surrogated ts
-}
+# As can be seen from the graph, p-value is the highest (0.78) when lambda=0.02653.
+# At this point we would fail to reject the null hypothesis with highest p-value, so it would be plausible to say
+# that the data stems from an exponential distribution with lambda close to 0.02653.
+# In fact from the test, p-value is greater than 0.05 in the lambda interval between 0.021 and 0.032 (please note)
+# that these values may slightly change every time the test is executed (since there are random variables involved).
 
-pUpperBound=sum(tstarUpperBound<t)/B # P-value upon which we would reject the null hypothesis.
-# This is the probability of computing the statistic with values higher than the observed. 
+#By ploting a qqplot between the data and Exp(0.02653) is also possible to see that a graph that resembles the 
+#0-1 line which reinforces that the data could stem from a exponential distribution with lambda=0.02653.
 
-pUpperBound
-# As can be seen, p is very low(0), so we reject the null hypothesis in favor of the alternative hypothesis.
-
-#Conclusion: Given the two tests above is very plausible that lambda is located between 0.01 and 0.1.
+qqplot(data, rexp(n,0.02653), main="QQPlot - Data x Exp(0.02653)")
 
 # Item 1.2:
 # We generate the bootstrap interval, using the median as location estimator.
