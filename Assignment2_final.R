@@ -248,6 +248,7 @@ pairs(peruvians, upper.panel=NULL)
 # Question 5.2
 attach(peruvians) 
 
+
 # Test 5.2.1 (migration x age)
 peruvians[,c(1,2)]
 cor.test(migration, age,method="spearman")
@@ -261,8 +262,13 @@ cor.test(migration, length,method="spearman")
 # Test 5.2.4 (migration x wrist)
 cor.test(migration, wrist,method="spearman")
 
-# Test 5.2.5 (migration x diastolic)
+# Test 5.2.5 (migration x systolic)
+cor.test(migration, systolic,method="spearman")
+
+# Test 5.2.6 (migration x diastolic)
 cor.test(migration, diastolic,method="spearman")
+
+
 
 ### Exercise 6
 
