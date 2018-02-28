@@ -177,12 +177,12 @@ klm=scan("klm.txt")
 qqnorm(klm,main="QQ-plot of KLM")
 m=sum(klm>31)
 n= length(klm)
-binom.test(m,n,p=0.5)
+binom.test(m,n,p=0.5,alternative = c("greater"))
 
 # Question 3.2
 m=sum(klm>72)
 n= length(klm)
-binom.test(m,n,p=0.1)
+binom.test(m,n,p=0.1,alternative = c("greater"))
 
 ### Exercise 4 
 
