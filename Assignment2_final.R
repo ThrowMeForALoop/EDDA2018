@@ -353,13 +353,12 @@ wilcox.test(diff_time[1:12,1],diff_time[13:24,1])
 
 # Question 6.6
 par(mfrow=c(1,2))
-as.matrix(diff_time)
 diff_frame= data.frame(time_diff=as.vector(diff_time[,1]), drink_type=factor(rep(1:2,each=12)))
 diff_time_aov= lm(time_diff~drink_type,data = diff_frame)
 time_residual=residuals(diff_time_aov)
 
-qqnorm(time_residual[1:12],main = 'QQ-Plot of Residual lemo')
-qqnorm(time_residual[13:24],main = 'QQ-Plot of Residual soft')
+qqnorm(time_residual[1:12],main = 'QQ-Plot Residual soft')
+qqnorm(time_residual[13:24],main = 'QQ-Plot Residual energy')
 #t.test(diff_time[1:12,1],diff_time[13:24,1],paired = TRUE)
 
 
